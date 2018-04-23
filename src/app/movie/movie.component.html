@@ -1,9 +1,9 @@
 <div class="card mt-2">
   <img class="card-img-top" src="https://image.tmdb.org/t/p/w300/{{movie.poster_path}}" alt="Card image cap">
   <div class="card-body">
-    <h3 class="card-title text-ellipsis">{{movie.title}}</h3>
+    <a [routerLink]="['/movie', movie.id]"><h3 class="card-title text-ellipsis">{{movie.title}}</h3></a>    
     <p class="card-text"><strong>Release date:</strong> {{movie.release_date}}</p>
-    <h4><span class="badge badge-primary" *ngIf="movie.vote_average > 0">{{movie.vote_average}} <i class="fas fa-star fa-1x" style="color: orange"></i>
+    <h4><span class="badge badge-primary" *ngIf="movie.vote_average > 0">{{movie.vote_average}} <i class="fas fa-star fa-1x" style="color: orange"></i> out of {{movie.vote_count}} votes.
       </span></h4>
   </div>
   <div class="card-footer">
