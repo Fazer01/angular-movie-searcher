@@ -1,0 +1,57 @@
+<div class="row is-flex" *ngIf="movieDetail">
+  <!--Render image to the first 4 cols of the grid-->
+  <div class="col-md-4"> 
+    <img src="https://image.tmdb.org/t/p/w500/{{movieDetail.poster_path}}" class="img-fluid rounded">
+    <p>
+      <a *ngIf="movieDetail.homepage" href="{{movieDetail.homepage}}" class="btn btn-info btn-block mt-2">Visit website</a>
+    </p>
+  </div>
+  <!--Render the rest and info in the remaining 8 cols-->
+  <div class="col-md-8">
+    <div class="display-3">{{movieDetail.title}}      
+      <span>
+        <small *ngIf="movieDetail.vote_average > 0" >{{movieDetail.vote_average}}
+          <i class="fas fa-star rating"></i>
+        </small>
+      </span>
+      <span>
+        <small *ngIf="movieDetail.vote_average <= 0">
+          <em>Rating not available, movie not released yet!</em>
+        </small>
+      </span>
+    </div>  
+    <h3>Released on: {{movieDetail.release_date}}</h3>
+    <blockquote class="blockquote"><em>{{movieDetail.tagline}}</em></blockquote>
+    <h5>
+      <a class="badge badge-pill badge-warning mx-1 my-1" 
+      [routerLink]="['/genre', genre.id, genre.name]" 
+      *ngFor="let genre of movieDetail.genres">{{genre.name}}</a>      
+    </h5>
+    <hr class="line">
+    <h3>Overview</h3>
+      <p>{{movieDetail.overview}}</p>
+    <hr class="line">
+    <div class="row is-flex" *ngIf="movieCast && movieCast.length > 0">
+      <div class="col-md-12">
+        <h3> Cast</h3>
+      </div>
+      <div class="col-md-3" *ngFor="let actor of movieCast">
+        <div class="thumbnail">
+          <img class="img-fluid rounded" src="https://image.tmdb.org/t/p/w500/{{actor.profile_path}}">
+          <div class="caption">
+            <h6 class="text-center"><a [routerLink]="['/actor', actor.id]">{{actor.name}}</a></h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr class="line">
+<div class="row is-flex" *ngIf="movieVideo">
+  <div class="col-md-12">
+    <h3 class="text-center">Trailer</h3>
+    <div class="embed-responsive embed-responsive-16by9">
+      <iframe class="embed-responsive-item" [src]="movieVideo.safeUrl" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>

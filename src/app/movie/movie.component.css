@@ -1,0 +1,9 @@
+img {
+    width: 100%;
+}
+
+.text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
