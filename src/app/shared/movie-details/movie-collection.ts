@@ -1,9 +1,6 @@
-export class MovieCollection {
-    constructor(
-        public id: number, 
-        public name: string, 
-        public poster_path: string, 
-        public backdrop_path: string
-    ){}    
-
+export interface  MovieCollection {
+        id: number;
+        name: string;
+        poster_path: string; 
+        backdrop_path: string;
 }

@@ -14,7 +14,7 @@ import { Cast } from '../shared/movie-credits/movie-credits';
 export class MovieDetailComponent implements OnInit {
 
   public movieDetail: MovieDetail;
-  public movieVideo: MovieVideo;
+  public movieVideos: MovieVideo[];
   public movieCast: Cast[];
 
   constructor(private activatedRoute: ActivatedRoute, private movieFetcher: MovieFetcherService, private sanitizer: DomSanitizer) 
@@ -35,10 +35,13 @@ export class MovieDetailComponent implements OnInit {
         err => console.error(err)
       );          
      
-      this.movieFetcher.getVideoForMovieById(id).subscribe(video => 
+      this.movieFetcher.getVideoForMovieById(id).subscribe(videos => 
       {   
-        video.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/' + video.key);
-        this.movieVideo = video;  
+        for(let video of videos){
+          video.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/' + video.key);
+        }
+        
+        this.movieVideos = videos;  
       }, 
       err => console.error(err)); 
 

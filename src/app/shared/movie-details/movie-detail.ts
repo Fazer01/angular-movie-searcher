@@ -4,34 +4,30 @@ import { ProductionCompany } from "./movie-productioncompany";
 import { ProductionCountry } from "./movie-productioncountry";
 import { MovieLanguage } from "./movie-language";
 
-export class MovieDetail {
-
-    constructor (
-        public adult: boolean,
-        public backdrop_path: string,
-        public belongs_to_collection: MovieCollection,
-        public budget: number,
-        public genres: MovieGenre[],
-        public homepage: string,
-        public id: number,
-        public imdb_id: string,
-        public original_language: string,
-        public original_title: string,
-        public overview: string,
-        public popularity: number,
-        public poster_path: string,
-        public production_companies: ProductionCompany[],
-        public production_countries: ProductionCountry[],
-        public release_date: string,
-        public revenue: number,
-        public runtime: number,
-        public spoken_languages: MovieLanguage[],
-        public status: string,
-        public tagline: string,
-        public title: string,
-        public video: boolean,
-        public vote_average: number,
-        public vote_count: number)
-        {}
-    
+export interface MovieDetail {
+    adult: boolean;
+    backdrop_path: string;
+    belongs_to_collection: MovieCollection;
+    budget: number;
+    genres: MovieGenre[];
+    homepage: string;
+    id: number;
+    imdb_id: string;
+    original_language: string;
+    original_title: string;
+    overview: string;
+    popularity: number;
+    poster_path: string;
+    production_companies: ProductionCompany[];
+    production_countries: ProductionCountry[];
+    release_date: string;
+    revenue: number;
+    runtime: number;
+    spoken_languages: MovieLanguage[];
+    status: string;
+    tagline: string;
+    title: string;
+    video: boolean;
+    vote_average: number;
+    vote_count: number
 }

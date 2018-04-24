@@ -1,3 +1,4 @@
 export class MovieLanguage {
-    constructor(public iso_639_1: string, public name: string){}
+    iso_639_1: string;
+    name: string;
 }

@@ -11,6 +11,7 @@ import { MovieVideo } from './movie-details/movie-video';
 import { MovieVideoResult } from './movie-details/movie-video-result';
 import { MovieCredits } from './movie-credits/movie-credits';
 import { UpcomingMovies } from './movie-upcoming/movie-upcoming';
+import { removeSummaryDuplicates } from '@angular/compiler';
 
 const httpHeaders = {
   headers: new HttpHeaders({       
@@ -23,33 +24,32 @@ export class MovieFetcherService {
 
   private apiKey: string = '6545279e0de20ff3691b0fdc6e99c188';
   private baseSearchMovieUrl: string = 'https://api.themoviedb.org/3/search/movie';
-  private baseSearchMovieByIDUrl: string = 'https://api.themoviedb.org/3/movie';    
-  private httpOptions: HttpHeaders; 
+  private baseSearchMovieByIDUrl: string = 'https://api.themoviedb.org/3/movie';  
+
 
   constructor(private http: HttpClient) { }
 
-  getVideoForMovieById(movieId: number): Observable<MovieVideo>{
+  getVideoForMovieById(movieId: number): Observable<MovieVideo[]>{
+
     if(movieId < 0 || movieId === null)
     {
       return of(null);
     }
 
     let searchParams = new HttpParams();
-    // Begin assigning parameters
     searchParams = searchParams.append('api_key', this.apiKey);
 
-    return this.http.get<MovieVideoResult>(`${this.baseSearchMovieByIDUrl}/${movieId}/videos`,{headers: httpHeaders.headers, params: searchParams}).pipe(     
-      map((results:MovieVideoResult) => {
-        let video = results.results[0];
-        return new MovieVideo(video.id, video.iso_639_1, video.iso_3166_1, video.key, video.name, video.site, video.size, video.type);
-      }),
+    return this.http.get(`${this.baseSearchMovieByIDUrl}/${movieId}/videos`,{headers: httpHeaders.headers, params: searchParams}).pipe(     
+      map((results:MovieVideoResult) => { return results.results}),       
+      catchError(this.handleError)
     )
   }
 
   getUpcomingMovies(): Observable<Movie[]>{
+
     let searchParams = new HttpParams();
-    // Begin assigning parameters
     searchParams = searchParams.append('api_key', this.apiKey);
+
     return this.http.get<Movie[]>(`${this.baseSearchMovieByIDUrl}/upcoming`, {headers: httpHeaders.headers, params: searchParams}).pipe(
       map((results:any) => {return results.results} ), 
       catchError(this.handleError)
@@ -64,29 +64,22 @@ export class MovieFetcherService {
     }
 
     let searchParams = new HttpParams();
-    // Begin assigning parameters
     searchParams = searchParams.append('api_key', this.apiKey);
 
     return this.http.get<MovieDetail>(`${this.baseSearchMovieByIDUrl}/${movieId}`,{headers: httpHeaders.headers, params: searchParams}).pipe(     
-      map( movieDetail  => {
-          return new MovieDetail(movieDetail.adult, movieDetail.backdrop_path, movieDetail.belongs_to_collection, movieDetail.budget, movieDetail.genres, movieDetail.homepage, movieDetail.id, 
-            movieDetail.imdb_id, movieDetail.original_language, movieDetail.original_title, movieDetail.overview, movieDetail.popularity, movieDetail.poster_path, movieDetail.production_companies, 
-          movieDetail.production_countries, movieDetail.release_date, movieDetail.revenue, movieDetail.runtime, movieDetail.spoken_languages, movieDetail.status, movieDetail.tagline, 
-      movieDetail.title, movieDetail.video, movieDetail.vote_average, movieDetail.vote_count)
-        }),
-        catchError(this.handleError)      
+      map( (movieDetail:MovieDetail)  => { return movieDetail}),
+      catchError(this.handleError)      
     )    
   }
 
+
   getMovieCredits(movieID: number): Observable<MovieCredits>{
-    let searchParams = new HttpParams();
-    // Begin assigning parameters
+
+    let searchParams = new HttpParams();    
     searchParams = searchParams.append('api_key', this.apiKey);
 
-    return this.http.get<MovieCredits>(`${this.baseSearchMovieByIDUrl}/${movieID}/credits`, {headers: httpHeaders.headers, params: searchParams}).pipe(
-      tap(results => console.log(results)), 
-      map( (results:MovieCredits) => {return results}),
-      tap(results => console.log(results)),
+    return this.http.get<MovieCredits>(`${this.baseSearchMovieByIDUrl}/${movieID}/credits`, {headers: httpHeaders.headers, params: searchParams}).pipe(     
+      map( (results:MovieCredits) => {return results}),      
       catchError(this.handleError)      
     )
   }
@@ -97,21 +90,15 @@ export class MovieFetcherService {
     {
       return of(null);
     }
-    let searchParams = new HttpParams();
-    // Begin assigning parameters
+    let searchParams = new HttpParams();  
+
     searchParams = searchParams.append('api_key', this.apiKey);
-    searchParams = searchParams.append('query', searchTerm);       
+    searchParams = searchParams.append('query', searchTerm);
 
     return this.http.get<Movie[]>(`${this.baseSearchMovieUrl}`, {headers: httpHeaders.headers, params: searchParams}).pipe(     
-      map((results:any) => { return results.results}),
-        // return results.results.map(
-        //   movie => {
-        //     return new Movie(movie.vote_count, movie.id, movie.video, movie.vote_average, movie.title, movie.popularity, movie.poster_path, 
-        //       movie.original_language, movie.original_title, movie.genre_ids, movie.backdrop_path, movie.adult, movie.overview, movie.release_date);
-        //   }
-        // )
-        catchError(this.handleError)
-      )
+      map((results:any) => { return results.results}),       
+      catchError(this.handleError)
+    )
   }
 
   private handleError(error: HttpErrorResponse) {

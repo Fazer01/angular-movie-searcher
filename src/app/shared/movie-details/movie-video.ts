@@ -1,18 +1,13 @@
-import { SafeResourceUrl, DomSanitizer } from "@angular/platform-browser";
+import { SafeResourceUrl } from "@angular/platform-browser";
 
-export class MovieVideo {
-
-    public safeUrl: SafeResourceUrl
-    constructor(        
-        public id: string,
-        public iso_639_1: string,
-        public iso_3166_1: string,
-        public key: string,
-        public name: string,
-        public site: string,
-        public size: number,
-        public type: string)
-        {
-            this.safeUrl = null;
-        }
+export interface MovieVideo {
+    safeUrl: SafeResourceUrl;       
+    id: string;
+    iso_639_1: string;
+    iso_3166_1: string;
+    key: string;
+    name: string;
+    site: string;
+    size: number;
+    type: string;        
 }

@@ -1,6 +1,14 @@
 # MovieSearcher
 
+This movie search application is based on a search API provided by [TMDb](https://www.themoviedb.org/).
+You can search for all kinds of movies. 
+Please note: This product uses the TMDb API but is not endorsed or certified by TMDb
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.3.
+
+## First checkout
+Please run `npm install -i` first in the directory where this project is checked out to. This is to install all the necessary files and creates folder 
+node_modules.
 
 ## Development server
 
