@@ -1,30 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MovieFetcherService } from '../shared/moviefetcher.service';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormBuilder } from '@angular/forms';
 import { distinct, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 import { Movie } from '../shared/movie';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'smx-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
   public searchTerm: FormControl;
   public loading: boolean;
   public movies: Movie[];
   public upcomingMovies: Movie[];
 
-  constructor(private movieFetcher: MovieFetcherService) {  
+  private searchTermSub: Subscription;
+
+  constructor(private movieFetcher: MovieFetcherService, private formBuilder: FormBuilder) {  
     this.searchTerm = new FormControl();
     this.loading = false;
    }
 
+   ngOnDestroy()
+   {
+     this.searchTermSub.unsubscribe();
+   }
+  
   ngOnInit() {
 
-    this.searchTerm.valueChanges.pipe(
+    this.searchTermSub = this.searchTerm.valueChanges.pipe(
       debounceTime(400), 
       distinctUntilChanged(),      
       tap(_ => this.loading = true),

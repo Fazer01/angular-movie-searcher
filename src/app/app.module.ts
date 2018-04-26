@@ -9,7 +9,7 @@ import { HomeComponent } from './home/home.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { MovieFetcherService } from './shared/moviefetcher.service';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { MovieComponent } from './movie/movie.component';
 import { MovieDetailComponent } from './movie-detail/movie-detail.component';
@@ -30,9 +30,9 @@ import { AboutComponent } from './about/about.component';
     RoutingModule, 
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule, 
   ],
-  providers: [MovieFetcherService],
+  providers: [MovieFetcherService, FormBuilder],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

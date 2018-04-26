@@ -67,7 +67,7 @@ export class MovieFetcherService {
     searchParams = searchParams.append('api_key', this.apiKey);
 
     return this.http.get<MovieDetail>(`${this.baseSearchMovieByIDUrl}/${movieId}`,{headers: httpHeaders.headers, params: searchParams}).pipe(     
-      map( (movieDetail:MovieDetail)  => { return movieDetail}),
+      map( (movieDetail:MovieDetail)  => { return movieDetail}),      
       catchError(this.handleError)      
     )    
   }
@@ -91,7 +91,6 @@ export class MovieFetcherService {
       return of(null);
     }
     let searchParams = new HttpParams();  
-
     searchParams = searchParams.append('api_key', this.apiKey);
     searchParams = searchParams.append('query', searchTerm);
 
@@ -101,6 +100,7 @@ export class MovieFetcherService {
     )
   }
 
+  //Some error handler function from Anguler.io
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
