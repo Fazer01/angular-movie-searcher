@@ -95,7 +95,8 @@ export class MovieFetcherService {
     searchParams = searchParams.append('query', searchTerm);
 
     return this.http.get<Movie[]>(`${this.baseSearchMovieUrl}`, {headers: httpHeaders.headers, params: searchParams}).pipe(     
-      map((results:any) => { return results.results}),       
+      map((results:any) => { return results.results}),     
+      tap(results => console.log(results)),
       catchError(this.handleError)
     )
   }

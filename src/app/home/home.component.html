@@ -1,9 +1,9 @@
 <div class="jumbotron">
   <p class="lead">To search for any movie, please enter a search term below</p>
   <hr class="my-4">
-  <form novalidate class="form">
+  <form novalidate [formGroup]="searchForm">
     <div class="form-group">      
-      <input style="font-size: 20px;" type="search" class="form-control" [formControl]="searchTerm" placeholder="Start typing">      
+      <input style="font-size: 20px;" type="search" class="form-control" formControlName="searchTerm" placeholder="Start typing">      
     </div>  
   </form>
 </div>
@@ -13,12 +13,14 @@
 <div class="text-center" *ngIf="loading" >
   <span><h2>Loading...</h2><i class="fa fa-spinner fa-spin fa-5x fa-fw"></i></span>
 </div>
-<div *ngIf="movies && movies.length > 0">
-  <h3 class="orange-text">Search Results</h3>
-  <div class="row">
-    <!--Render each specific movie to their respective columns-->
-    <div class="col-sm-6 col-md-4 col-lg-3 col-xs-6" *ngFor="let movie of movies">
-      <smx-movie [movie]="movie"></smx-movie>
+<div *ngIf="movies$ | async as movies">    
+  <div *ngIf="movies.length > 0"> 
+    <h3 class="orange-text">Search Results</h3>
+    <div class="row">
+      <!--Render each specific movie to their respective columns-->
+      <div class="col-sm-6 col-md-4 col-lg-3 col-xs-6" *ngFor="let movie of movies">
+        <smx-movie [movie]="movie"></smx-movie>
+      </div>
     </div>
   </div>
 </div>

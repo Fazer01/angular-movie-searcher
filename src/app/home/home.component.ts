@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MovieFetcherService } from '../shared/moviefetcher.service';
-import { FormControl, FormBuilder } from '@angular/forms';
-import { distinct, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
+import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
+import { distinct, debounceTime, distinctUntilChanged, switchMap, tap, finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 import { Movie } from '../shared/movie';
 import { Subscription } from 'rxjs/Subscription';
@@ -11,54 +11,27 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit {
 
-  public searchTerm: FormControl;
+  public searchForm: FormGroup;
   public loading: boolean;
-  public movies: Movie[];
-  public upcomingMovies: Movie[];
-
-  private searchTermSub: Subscription;
+  public movies$: Observable<Movie[]>;
 
   constructor(private movieFetcher: MovieFetcherService, private formBuilder: FormBuilder) {  
-    this.searchTerm = new FormControl();
-    this.loading = false;
-   }
 
-   ngOnDestroy()
-   {
-     this.searchTermSub.unsubscribe();
+    this.searchForm = this.formBuilder.group({
+      searchTerm: ''
+    })
+    this.loading = false;
    }
   
   ngOnInit() {
-
-    this.searchTermSub = this.searchTerm.valueChanges.pipe(
+    this.movies$ = this.searchForm.get('searchTerm').valueChanges.pipe(
       debounceTime(400), 
       distinctUntilChanged(),      
       tap(_ => this.loading = true),
-      switchMap(term => this.movieFetcher.getMoviesBySearch(term)),    
-    ).subscribe(      
-      returnedMovies => 
-      {       
-        this.movies = returnedMovies;
-        this.loading = false;
-      },
-      err => console.error(err)
+      switchMap(term => this.movieFetcher.getMoviesBySearch(term)),      
+      tap( ()=> this.loading = false)    
     )
-
-   
-  }
-
-  onEnter(term: string)
-  {
-    console.log(`Searching for: ${term}`);
-  }
-
-   searchMovies(searchTerm: string)
-   {
-     console.log(`Searching for: ${searchTerm}`);
-   }
-  //   let results = this.movieFetcher.getMoviesBySearch()
-  // )
-
+  }    
 }

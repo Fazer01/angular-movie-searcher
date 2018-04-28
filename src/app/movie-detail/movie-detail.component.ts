@@ -1,75 +1,63 @@
-import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
+import { Component, OnInit, HostBinding } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MovieFetcherService } from '../shared/moviefetcher.service';
 import { MovieDetail } from '../shared/movie-details/movie-detail';
 import { MovieVideo } from '../shared/movie-details/movie-video';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Cast } from '../shared/movie-credits/movie-credits';
+import { Cast, MovieCredits } from '../shared/movie-credits/movie-credits';
 import { Subscription } from 'rxjs/Subscription';
+import {map, switchMap, tap } from 'rxjs/operators';
+import {forkJoin } from 'rxjs/observable/forkJoin';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'smx-movie-detail',
   templateUrl: './movie-detail.component.html',
   styleUrls: ['./movie-detail.component.css'],
 })
-export class MovieDetailComponent implements OnInit, OnDestroy {
+export class MovieDetailComponent implements OnInit {
 
-  public movieDetail: MovieDetail;
-  public movieVideos: MovieVideo[];
-  public movieCast: Cast[];
+  public movieDetail$: Observable<MovieDetail>;
+  public movieVideos$: Observable<MovieVideo[]>;
+  public movieCast$: Observable<Cast[]>;
 
   private routeSub: Subscription;
-  private movieIDSub: Subscription;
+  private movieIDSub: Subscription; 
   private movieCreditsSub: Subscription;
   private movieVideoSub: Subscription;
 
   constructor(private activatedRoute: ActivatedRoute, private movieFetcher: MovieFetcherService, private sanitizer: DomSanitizer) 
-  {     
-
-    
-   
-  }
-
-  ngOnDestroy()
   {
-    this.routeSub.unsubscribe(); 
-    this.movieIDSub.unsubscribe(); 
-    this.movieCreditsSub.unsubscribe(); 
-    this.movieVideoSub.unsubscribe();     
   }
  
   ngOnInit() {
-    this.routeSub = this.activatedRoute.params.subscribe((params) =>
-    {
-      //Start fetching moviedata
-      const id = params['id'];        
-      this.movieIDSub = this.movieFetcher.getMovieByID(id).subscribe(results => 
-        { 
-          this.movieDetail = results;
-          
-        }, 
-        err => console.error(err)
-      );          
-     
-      this.movieVideoSub = this.movieFetcher.getVideoForMovieById(id).subscribe(videos => 
-      {   
-        for(let video of videos){
+    
+    //1. Fetch the moviedetails by the movie id
+    this.movieDetail$ = this.activatedRoute.params.pipe(
+      map(params => params['id']),
+      switchMap((id:number) => this.movieFetcher.getMovieByID(id))
+      );                
+
+    //2. Fetch the movievideos by the movie id
+    this.movieVideos$ = this.activatedRoute.params.pipe(
+      map(params => params['id']),
+      switchMap((id:number) => this.movieFetcher.getVideoForMovieById(id)),
+      map( (results:MovieVideo[]) => {
+        for(let video of results)
+        {
           video.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/' + video.key);
         }
-        
-        this.movieVideos = videos;  
-      }, 
-      err => console.error(err)); 
-
-      this.movieCreditsSub = this.movieFetcher.getMovieCredits(id).subscribe( results => 
-      {
-        console.log(results);
-        console.log(`Name: ${results.cast[0].name}; Character: ${results.cast[0].character}`);
-        this.movieCast = results.cast.splice(0, 4);
-
-      },
-      err => console.error(err))
-
-    });
+        return results;
+      })      
+    );   
+    //3. Fetch the cast by the movie id
+    this.movieCast$ = this.activatedRoute.params.pipe(
+      map(params => params['id']),  
+      switchMap((id:number) => this.movieFetcher.getMovieCredits(id)),
+      map ( (results:MovieCredits) => {
+         return results.cast.splice(0, 4);
+       })      
+    );   
   }
 }
+    

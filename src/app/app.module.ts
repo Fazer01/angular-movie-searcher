@@ -10,7 +10,6 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { MovieFetcherService } from './shared/moviefetcher.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
-import { FormsModule } from '@angular/forms';
 import { MovieComponent } from './movie/movie.component';
 import { MovieDetailComponent } from './movie-detail/movie-detail.component';
 import { UpcomingComponent } from './upcoming/upcoming.component';
@@ -22,13 +21,14 @@ import { AboutComponent } from './about/about.component';
     HomeComponent,  
     NavigationComponent, 
     MovieComponent, 
-    MovieDetailComponent, UpcomingComponent, AboutComponent
+    MovieDetailComponent, 
+    UpcomingComponent, 
+    AboutComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     RoutingModule, 
-    FormsModule,
     ReactiveFormsModule,
     HttpClientModule, 
   ],
