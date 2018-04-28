@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MovieFetcherService } from '../shared/moviefetcher.service';
 import { Movie } from '../shared/movie';
+import { Observable } from 'rxjs/Observable';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'smx-upcoming',
@@ -10,20 +12,16 @@ import { Movie } from '../shared/movie';
 export class UpcomingComponent implements OnInit {
 
   public loading: boolean;
-  public upcomingMovies: Movie[];
+  public upcomingMovies$: Observable<Movie[]>;
 
   constructor(private movieFetcher: MovieFetcherService) { }
 
   ngOnInit() {
 
     this.loading = true;
-    this.movieFetcher.getUpcomingMovies().subscribe( results =>
-      {
-        this.upcomingMovies = results;
-        console.log(this.upcomingMovies);
-        this.loading = false;
-      }
-    )
+    this.upcomingMovies$ = this.movieFetcher.getUpcomingMovies().pipe(
+      tap(() => this.loading = false)
+    )     
   }
 
 }

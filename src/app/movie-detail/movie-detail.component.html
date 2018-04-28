@@ -1,5 +1,5 @@
 <hr class="line">
-<div class="row" *ngIf="movieDetail$ | async as movie">
+<div class="row" *ngIf="(movieDetail$ | async) as movie; else loading">
   <!--Render image to the first 4 cols of the grid-->
   <div class="col-md-4"> 
     <img src="https://image.tmdb.org/t/p/w500/{{movie.poster_path}}" class="img-fluid rounded">
@@ -23,7 +23,7 @@
 </div>
 <hr class="line">
 
-<div class="row" *ngIf="movieCast$ | async as cast">
+<div class="row" *ngIf="(movieCast$ | async) as cast; else loading">
     <div class="col-md-12">
       <div class="text-center display-4">Cast</div>
     </div>
@@ -36,7 +36,7 @@
     </div>
   </div>
   <hr class="line">
-<div class="row" *ngIf="movieVideos$ | async as videos">
+<div class="row" *ngIf="(movieVideos$ | async) as videos; else loading">
   <div class="col-md-12" >
     <div class="text-center display-4" *ngIf="videos.length === 1">Video</div>  
     <div class="text-center display-4" *ngIf="videos.length > 1">Videos</div>  
@@ -49,3 +49,9 @@
     </div>
   </div>
 </div>
+
+<ng-template #loading>
+  <div class="text-center" >
+    <span><h2>Loading...</h2><i class="fa fa-spinner fa-spin fa-5x fa-fw"></i></span>
+  </div>
+</ng-template>

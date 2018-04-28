@@ -8,11 +8,11 @@ import { AboutComponent } from './about/about.component';
 const routes: Routes = [
   {path: '', component: HomeComponent, pathMatch: 'full'},   
   {path: 'home', component: HomeComponent},
-  {path: 'search', component: HomeComponent},
+  {path: 'search', redirectTo: 'home'},
   {path: 'movie/:id', component: MovieDetailComponent}, 
   {path: 'upcoming', component: UpcomingComponent},
   {path: 'about', component: AboutComponent},
-  {path: '**', component: HomeComponent}, //if none matches above...
+  {path: '**', redirectTo: 'home'}, //if none matches above...
 ]
 
 @NgModule({

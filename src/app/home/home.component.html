@@ -13,8 +13,8 @@
 <div class="text-center" *ngIf="loading" >
   <span><h2>Loading...</h2><i class="fa fa-spinner fa-spin fa-5x fa-fw"></i></span>
 </div>
-<div *ngIf="movies$ | async as movies">    
-  <div *ngIf="movies.length > 0"> 
+<div *ngIf="(movies$ | async) as movies">    
+  <div *ngIf="movies.length > 0 && !loading"> 
     <h3 class="orange-text">Search Results</h3>
     <div class="row">
       <!--Render each specific movie to their respective columns-->
