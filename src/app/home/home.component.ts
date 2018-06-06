@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MovieFetcherService } from '../shared/moviefetcher.service';
 import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
 import { distinct, debounceTime, distinctUntilChanged, switchMap, tap, finalize } from 'rxjs/operators';
-import { Observable } from 'rxjs/Observable';
+import { Observable,  Subscription } from 'rxjs';
 import { Movie } from '../shared/movie';
-import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'smx-home',

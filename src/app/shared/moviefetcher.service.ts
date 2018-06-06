@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpParams, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { tap, catchError, map } from 'rxjs/operators';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable ,  of, throwError } from 'rxjs';
 import { Movie } from './movie';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { RootResult } from './rootresult';
 import { MovieDetail } from './movie-details/movie-detail';
 import { MovieVideo } from './movie-details/movie-video';
@@ -114,7 +112,6 @@ export class MovieFetcherService {
         `body was: ${error.error}`);
     }
     // return an ErrorObservable with a user-facing error message
-    return new ErrorObservable(
-      'Something bad happened; please try again later.');
+    return throwError('Something bad happened; please try again later.');
   };
 }

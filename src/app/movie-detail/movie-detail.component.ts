@@ -5,10 +5,8 @@ import { MovieDetail } from '../shared/movie-details/movie-detail';
 import { MovieVideo } from '../shared/movie-details/movie-video';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Cast, MovieCredits } from '../shared/movie-credits/movie-credits';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription , forkJoin ,  Observable } from 'rxjs';
 import {map, switchMap, tap } from 'rxjs/operators';
-import {forkJoin } from 'rxjs/observable/forkJoin';
-import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'smx-movie-detail',

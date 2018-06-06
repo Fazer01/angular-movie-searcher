@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MovieFetcherService } from '../shared/moviefetcher.service';
 import { Movie } from '../shared/movie';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Component({
