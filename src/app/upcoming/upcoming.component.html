@@ -1,11 +1,13 @@
-<div *ngIf="(upcomingMovies$ | async) as upcoming; else loading">
-  <h3>Top {{upcoming.length}} upcoming movies</h3>
+<div *ngIf="upcomingMovies; else loading">
+  <h3>Top {{upcomingMovies.length}} upcoming movies</h3> <span> <pagination [total-items]="total_results" [page-size]="MAX_PAGE_SIZE" (page-changed)="onPageChange($event)"></pagination></span>
   <div class="row">
-    <div class="col-sm-6 col-md-4 col-lg-3 col-xs-6" *ngFor="let movie of upcoming">
+    <div class="col-sm-6 col-md-4 col-lg-3 col-xs-6" *ngFor="let movie of upcomingMovies">
       <smx-movie [movie]="movie"></smx-movie>
     </div>
   </div>
+ 
 </div>
+
 <!--Use ng-template here for loading purposes show a spinner to the user -->
 <ng-template #loading>
   <div class="text-center">

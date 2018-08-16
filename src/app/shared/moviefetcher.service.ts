@@ -37,19 +37,20 @@ export class MovieFetcherService {
     let searchParams = new HttpParams();
     searchParams = searchParams.append('api_key', this.apiKey);
 
-    return this.http.get(`${this.baseSearchMovieByIDUrl}/${movieId}/videos`,{headers: httpHeaders.headers, params: searchParams}).pipe(     
-      map((results:MovieVideoResult) => { return results.results}),       
+    return this.http.get(`${this.baseSearchMovieByIDUrl}/${movieId}/videos`,{headers: httpHeaders.headers, params: searchParams}).pipe(
+      map((results:MovieVideoResult) => { return results.results}),
       catchError(this.handleError)
     )
   }
 
-  getUpcomingMovies(): Observable<Movie[]>{
+  getUpcomingMovies(pageNumber): Observable<UpcomingMovies>{
 
     let searchParams = new HttpParams();
     searchParams = searchParams.append('api_key', this.apiKey);
-
-    return this.http.get<Movie[]>(`${this.baseSearchMovieByIDUrl}/upcoming`, {headers: httpHeaders.headers, params: searchParams}).pipe(
-      map((results:any) => {return results.results} ), 
+    searchParams = searchParams.append('page', pageNumber);
+    return this.http.get<UpcomingMovies>(`${this.baseSearchMovieByIDUrl}/upcoming`, 
+    {headers: httpHeaders.headers, params: searchParams}).pipe(
+      // map((results:any) => {return results} ),
       catchError(this.handleError)
     )
   }
@@ -65,20 +66,20 @@ export class MovieFetcherService {
     searchParams = searchParams.append('api_key', this.apiKey);
 
     return this.http.get<MovieDetail>(`${this.baseSearchMovieByIDUrl}/${movieId}`,{headers: httpHeaders.headers, params: searchParams}).pipe(     
-      map( (movieDetail:MovieDetail)  => { return movieDetail}),      
-      catchError(this.handleError)      
+      map( (movieDetail:MovieDetail)  => { return movieDetail}),
+      catchError(this.handleError)
     )    
   }
 
 
   getMovieCredits(movieID: number): Observable<MovieCredits>{
 
-    let searchParams = new HttpParams();    
+    let searchParams = new HttpParams();
     searchParams = searchParams.append('api_key', this.apiKey);
 
     return this.http.get<MovieCredits>(`${this.baseSearchMovieByIDUrl}/${movieID}/credits`, {headers: httpHeaders.headers, params: searchParams}).pipe(     
-      map( (results:MovieCredits) => {return results}),      
-      catchError(this.handleError)      
+      map( (results:MovieCredits) => {return results}),
+      catchError(this.handleError)
     )
   }
 

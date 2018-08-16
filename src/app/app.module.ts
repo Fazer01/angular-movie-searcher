@@ -14,23 +14,25 @@ import { MovieComponent } from './movie/movie.component';
 import { MovieDetailComponent } from './movie-detail/movie-detail.component';
 import { UpcomingComponent } from './upcoming/upcoming.component';
 import { AboutComponent } from './about/about.component';
+import { PaginationComponent } from './shared/pagination/pagination.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,  
-    NavigationComponent, 
-    MovieComponent, 
-    MovieDetailComponent, 
-    UpcomingComponent, 
-    AboutComponent
+    HomeComponent,
+    NavigationComponent,
+    MovieComponent,
+    MovieDetailComponent,
+    UpcomingComponent,
+    AboutComponent,
+    PaginationComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    RoutingModule, 
+    RoutingModule,
     ReactiveFormsModule,
-    HttpClientModule, 
+    HttpClientModule,
   ],
   providers: [MovieFetcherService, FormBuilder],
   bootstrap: [AppComponent]
